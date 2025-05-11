@@ -7,7 +7,7 @@ from flask import url_for
 from flask_login import UserMixin
 from werkzeug.security import generate_password_hash, check_password_hash
 
-from app import db, login, moscow_tz  # Убедитесь, что moscow_tz определен и импортирован
+from app import db, login, moscow_tz
 
 
 class User(UserMixin, db.Model):

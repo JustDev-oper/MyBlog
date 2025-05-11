@@ -5,3 +5,5 @@
 /app/static/uploads/wavy-black-white-background_1.jpg
 /app.db
 /migrations/
+/venv
+.idea
