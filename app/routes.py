@@ -143,8 +143,6 @@ def edit_profile():
 def create_post():
     form = CreatePostForm()
     if form.validate_on_submit():
-        print(f"current_user: {current_user}, current_user.id: {current_user.id}")
-        # Проверяем, что current_user существует и корректно загружен
         if current_user.is_authenticated:
             post = Post(title=form.title.data, body=form.body.data, preview=form.preview.data, author=current_user)
             db.session.add(post)
@@ -154,8 +152,6 @@ def create_post():
         else:
             flash('Ошибка: пользователь не аутентифицирован', 'danger')
             return redirect(url_for('login'))
-    else:
-        print(form.errors)  # Вывод ошибок для отладки
     return render_template("create_post.html", form=form)
 
 
@@ -163,7 +159,6 @@ def create_post():
 @login_required
 def post_detail(post_id):
     post = Post.query.filter_by(id=post_id).first_or_404()
-    print(f"Post.likes: {post.likes}")
     return render_template("post_details.html", post=post)
 
 
