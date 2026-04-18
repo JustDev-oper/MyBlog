@@ -246,3 +246,7 @@ def featured_posts(post_id):
 
     db.session.commit()
     return redirect(url_for('post_detail', post_id=post_id))
+
+@app.route('/api_info', methods=['GET'])
+def api_info():
+    return render_template("api_info.html")
