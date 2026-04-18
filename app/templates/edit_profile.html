@@ -7,7 +7,7 @@
     <!-- Edit Profile Form -->
     <div class="card mx-auto" style="max-width: 600px;">
         <div class="card-body">
-            <h3 class="card-title text-center mb-4">Edit Profile</h3>
+            <h3 class="card-title text-center mb-4">Изменить профиль</h3>
 
             <!-- Display Current Avatar -->
             <div class="text-center mb-4">
@@ -26,56 +26,56 @@
                 {{ form.hidden_tag() }}  <!-- CSRF token for form security -->
 
                 <div class="form-group">
-                    <label for="username">Username</label>
+                    <label for="username">Имя пользователя</label>
                     {{ form.username(class="form-control") }}
                 </div>
 
                 <div class="form-group">
-                    <label for="about_me">About Me</label>
+                    <label for="about_me">Обо мне</label>
                     {{ form.about_me(class="form-control", rows="10") }}
-                    <script src="https://cdn.tiny.cloud/1/247pvwinddayvgmaihbhjl5koq6ij8mbjbsesn6fqib18yoc/tinymce/6/tinymce.min.js"
-                            referrerpolicy="origin"></script>
-                    <script>
-                        tinymce.init({
-                            selector: '#about_me',
-                            plugins: 'advlist autolink lists link image charmap preview anchor textcolor',
-                            toolbar: 'undo redo | bullist numlist | hr',
-                            menubar: 'insert format'
-                        });
-                    </script>
+{#                    <script src="https://cdn.tiny.cloud/1/247pvwinddayvgmaihbhjl5koq6ij8mbjbsesn6fqib18yoc/tinymce/6/tinymce.min.js"#}
+{#                            referrerpolicy="origin"></script>#}
+{#                    <script>#}
+{#                        tinymce.init({#}
+{#                            selector: '#about_me',#}
+{#                            plugins: 'advlist autolink lists link image charmap preview anchor textcolor',#}
+{#                            toolbar: 'undo redo | bullist numlist | hr',#}
+{#                            menubar: 'insert format'#}
+{#                        });#}
+{#                    </script>#}
                 </div>
 
                 <!-- Upload New Avatar -->
                 <div class="form-group">
-                    <label for="avatar">Upload New Avatar (optional)</label>
+                    <label for="avatar">Загрузить новую аватарку (необязательно)</label>
                     <div class="custom-file">
                         <input type="file" name="avatar" class="custom-file-input" id="avatar" accept="image/*">
-                        <label class="custom-file-label" for="avatar">Choose file</label>
+                        <label class="custom-file-label" for="avatar">Выбрать файл</label>
                     </div>
                 </div>
 
-                <button type="submit" class="btn btn-primary btn-block">Save Changes</button>
+                <button type="submit" class="btn btn-primary btn-block">Сохранить изменения</button>
             </form>
         </div>
     </div>
 </div>
 
 <!-- Include Bootstrap's JavaScript bundle for custom file input functionality -->
-<script src="https://cdn.tiny.cloud/1/247pvwinddayvgmaihbhjl5koq6ij8mbjbsesn6fqib18yoc/tinymce/6/tinymce.min.js"
-        referrerpolicy="origin"></script>
-<script>
-    tinymce.init({
-        selector: '#about_me',
-        plugins: 'advlist autolink lists link image charmap preview anchor textcolor',
-        toolbar: 'undo redo | bullist numlist | hr',
-        menubar: 'insert format',
-        mobile: {
-            theme: 'silver',
-            plugins: 'advlist autolink lists link image charmap preview anchor textcolor',
-            toolbar: 'undo redo | bullist numlist | hr',
-            menubar: 'insert format'
-        }
-    });
-</script>
+{#<script src="https://cdn.tiny.cloud/1/247pvwinddayvgmaihbhjl5koq6ij8mbjbsesn6fqib18yoc/tinymce/6/tinymce.min.js"#}
+{#        referrerpolicy="origin"></script>#}
+{#<script>#}
+{#    tinymce.init({#}
+{#        selector: '#about_me',#}
+{#        plugins: 'advlist autolink lists link image charmap preview anchor textcolor',#}
+{#        toolbar: 'undo redo | bullist numlist | hr',#}
+{#        menubar: 'insert format',#}
+{#        mobile: {#}
+{#            theme: 'silver',#}
+{#            plugins: 'advlist autolink lists link image charmap preview anchor textcolor',#}
+{#            toolbar: 'undo redo | bullist numlist | hr',#}
+{#            menubar: 'insert format'#}
+{#        }#}
+{#    });#}
+{#</script>#}
 
 {% endblock %}

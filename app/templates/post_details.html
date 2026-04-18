@@ -14,7 +14,7 @@
                     <h1 class="card-title text-center my-3">{{ post.title }}</h1>
                     <p class="card-text mb-2">
                         <small class="text-muted">
-                            Posted on {{ post.formatted_timestamp() }} by
+                            Создан в {{ post.formatted_timestamp() }} пользователем
                             <a href="{{ url_for('user', username=post.author.username) }}"
                                class="text-decoration-none">
                                 {{ post.author.username }}
@@ -29,7 +29,7 @@
                 <div class="card-footer bg-light text-center">
                     <!-- Button to return to the previous page -->
                     <a href="/" class="btn btn-secondary rounded">
-                        <i class="fas fa-arrow-left"></i> Back
+                        <i class="fas fa-arrow-left"></i> Назад
                     </a>
 
                     <form action="{{ url_for('featured_posts', post_id=post.id) }}" method="POST" class="d-inline">

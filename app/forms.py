@@ -10,44 +10,44 @@ from app.models import User
 
 
 class LoginForm(FlaskForm):
-    username = StringField('Username', validators=[DataRequired(), Regexp(r'^[a-zA-Z0-9_]+$',
-                                                                          message="Username must contain only Latin letters, numbers, and underscores.")])
-    password = PasswordField('Password', validators=[DataRequired(), Regexp(r'^[a-zA-Z0-9_]+$',
-                                                                            message="Password must contain only Latin letters, numbers, and underscores.")])
-    remember_me = BooleanField('Remember Me')
-    submit = SubmitField('Sign In')
+    username = StringField('Имя пользователя', validators=[DataRequired(), Regexp(r'^[a-zA-Z0-9_]+$',
+                                                                          message="Имя пользователя должно содержать только латинские буквы, цифры и символы подчеркивания.")])
+    password = PasswordField('Пароль', validators=[DataRequired(), Regexp(r'^[a-zA-Z0-9_]+$',
+                                                                            message="Пароль должен содержать только латинские буквы, цифры и символы подчеркивания.")])
+    remember_me = BooleanField('Запомнить вход')
+    submit = SubmitField('Войти')
 
 
 class RegistrationForm(FlaskForm):
-    username = StringField('Username', validators=[DataRequired(), Regexp(r'^[a-zA-Z0-9_]+$',
-                                                                          message="Username must contain only Latin letters, numbers, and underscores.")])
-    email = StringField('Email', validators=[DataRequired(), Email()])
-    password = PasswordField('Password', validators=[DataRequired(), Regexp(r'^[a-zA-Z0-9_]+$',
-                                                                            message="Password must contain only Latin letters, numbers, and underscores.")])
+    username = StringField('Имя пользователя', validators=[DataRequired(), Regexp(r'^[a-zA-Z0-9_]+$',
+                                                                          message="Имя пользователя должно содержать только латинские буквы, цифры и символы подчеркивания.")])
+    email = StringField('Почта', validators=[DataRequired(), Email()])
+    password = PasswordField('Пароль', validators=[DataRequired(), Regexp(r'^[a-zA-Z0-9_]+$',
+                                                                            message="Пароль должен содержать только латинские буквы, цифры и символы подчеркивания.")])
     password2 = PasswordField(
-        'Repeat Password', validators=[DataRequired(), EqualTo('password'), Regexp(r'^[a-zA-Z0-9_]+$',
-                                                                                   message="Password must contain only Latin letters, numbers, and underscores.")])
-    submit = SubmitField('Register')
+        'Повторите пароль', validators=[DataRequired(), EqualTo('password'), Regexp(r'^[a-zA-Z0-9_]+$',
+                                                                                   message="Пароль должен содержать только латинские буквы, цифры и символы подчеркивания.")])
+    submit = SubmitField('Зарегистрироваться')
 
     def validate_username(self, username):
         user = db.session.scalar(sa.select(User).where(
             User.username == username.data))
         if user is not None:
-            raise ValidationError('Please use a different username.')
+            raise ValidationError('Это имя пользователя уже занято.')
 
     def validate_email(self, email):
         user = db.session.scalar(sa.select(User).where(
             User.email == email.data))
         if user is not None:
-            raise ValidationError('Please use a different email address.')
+            raise ValidationError('Эта почта уже зарегистрирована.')
 
 
 class EditProfileForm(FlaskForm):
-    username = StringField('Username', validators=[DataRequired(), Regexp(r'^[a-zA-Z0-9_]+$',
-                                                                          message="Username must contain only Latin letters, numbers, and underscores.")])
-    about_me = TextAreaField('About Me', validators=[Length(min=0)])
-    avatar = FileField('Upload New Avatar (optional)')
-    submit = SubmitField('Submit')
+    username = StringField('Имя пользователя', validators=[DataRequired(), Regexp(r'^[a-zA-Z0-9_]+$',
+                                                                          message="Имя пользователя должно содержать только латинские буквы, цифры и символы подчеркивания.")])
+    about_me = TextAreaField('Обо мне', validators=[Length(min=0)])
+    avatar = FileField('Загрузить новую аватарку (необязательно)')
+    submit = SubmitField('Подтвердить')
 
     def __init__(self, original_username, *args, **kwargs):
         super().__init__(*args, **kwargs)
@@ -59,21 +59,21 @@ class EditProfileForm(FlaskForm):
             stmt = sa.select(User).where(User.username == username.data)
             user = db.session.scalars(stmt).first()
             if user is not None:
-                raise ValidationError('Please use a different username.')
+                raise ValidationError('Это имя пользователя уже занято.')
 
 
 class CreatePostForm(FlaskForm):
-    title = StringField("Title", validators=[DataRequired()])
-    preview = StringField("Preview", validators=[DataRequired(), Length(min=10, max=100)])
-    body = TextAreaField("Main Text", validators=[DataRequired(), Length(min=10)])
-    submit = SubmitField('Create')
+    title = StringField("Заголовок", validators=[DataRequired()])
+    preview = StringField("Превью", validators=[DataRequired(), Length(min=10, max=100)])
+    body = TextAreaField("Основное содержание", validators=[DataRequired(), Length(min=10)])
+    submit = SubmitField('Запостить')
 
 
 class EditPostForm(FlaskForm):
-    title = StringField("Title", validators=[DataRequired()])
-    preview = StringField("Preview", validators=[DataRequired(), Length(min=10, max=100)])
-    body = TextAreaField("Main Text", validators=[DataRequired(), Length(min=10)])
-    submit = SubmitField('Submit')
+    title = StringField("Заголовок", validators=[DataRequired()])
+    preview = StringField("Превью", validators=[DataRequired(), Length(min=10, max=100)])
+    body = TextAreaField("Основное содержание", validators=[DataRequired(), Length(min=10)])
+    submit = SubmitField('Запостить')
 
     class EditPostForm(FlaskForm):
         def __init__(self, original_title, original_preview, original_body, *args, **kwargs):

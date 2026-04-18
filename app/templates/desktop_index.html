@@ -1,6 +1,6 @@
 {% extends "base.html" %}
 
-{% block title %}Home{% endblock %}
+{% block title %}Главная{% endblock %}
 
 {% block content %}
 <div class="container mt-5">
@@ -10,7 +10,7 @@
             {% if posts.items %}
             <h2 class="bg-secondary text-white text-center"
                 style="border-radius: 5px; padding: 10px 15px; margin: 0 0 20px 0;">
-                All Posts</h2>
+                Все посты</h2>
             <div class="row justify-content-center">
                 {% for post in posts.items %}
                 <div class="col-md-12 mb-4">
@@ -88,8 +88,8 @@
             {% else %}
             <!-- Empty State Message -->
             <div class="text-center mt-5 mb-5">
-                <h4>😔 Sorry, there's nothing here yet.</h4>
-                <p class="text-muted">Why not create your first post?</p>
+                <h4>😔 Извините, здесь пока ничего нет.</h4>
+                <p class="text-muted">Почему бы не создать свой первый пост?</p>
             </div>
             {% endif %}
         </div>
@@ -102,7 +102,7 @@
                 <div class="card mb-4 shadow-sm">
                     <div class="card-header bg-secondary text-white text-center">
                         <h6 class="mb-0"><i class="fas fa-fire-alt"></i>
-                            Popular Posts</h6>
+                            Популярные посты</h6>
                     </div>
                     <div class="card-body p-3"
                          style="max-height: 500px; overflow-y: auto;">
@@ -147,7 +147,7 @@
                 <div class="card mb-4 shadow-sm">
                     <div class="card-header bg-secondary text-white text-center">
                         <h6 class="mb-0"><i class="fas  fa-bookmark"></i>
-                            Featured Posts</h6>
+                            Избранные посты</h6>
                     </div>
                     <div class="card-body p-3"
                          style="max-height: 500px; overflow-y: auto;">
@@ -195,7 +195,7 @@
 <div class="fixed-bottom mb-4 mr-4 text-right">
     <a href="{{ url_for('create_post') }}"
        class="btn btn-success btn-lg shadow-lg">
-        <i class="fas fa-plus"></i> Create Post
+        <i class="fas fa-plus"></i> Создать пост
     </a>
 </div>
 <style>

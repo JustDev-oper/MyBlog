@@ -49,14 +49,14 @@ def login():
     if form.validate_on_submit():
         user = db.session.scalar(sa.select(User).where(User.username == form.username.data))
         if user is None or not user.check_password(form.password.data):
-            flash('Invalid username or password', "danger")
+            flash('Неправильное имя пользователя или пароль', "danger")
             return redirect(url_for('login'))
         login_user(user, remember=form.remember_me.data)
         next_page = request.args.get('next')
         if not next_page or urlsplit(next_page).netloc != '':
             next_page = url_for('index')
         return redirect(next_page)
-    return render_template('login.html', title='Sign In', form=form)
+    return render_template('login.html', title='Вход', form=form)
 
 
 @app.route('/logout')
@@ -91,9 +91,9 @@ def register():
         user.set_password(form.password.data)
         db.session.add(user)
         db.session.commit()
-        flash('Congratulations, you are now a registered user!', "success")
+        flash('Поздравляем! Теперь вы зарегистрированный пользователь.', "success")
         return redirect(url_for('login'))
-    return render_template('register.html', title='Register', form=form)
+    return render_template('register.html', title='Регистрация', form=form)
 
 
 @app.route('/edit_profile', methods=['GET', 'POST'])
@@ -128,7 +128,7 @@ def edit_profile():
                 current_user.avatar = filename
 
         db.session.commit()
-        flash('Your changes have been saved.', 'success')
+        flash('Изменения были сохранены.', 'success')
         return redirect(url_for('user', username=current_user.username))
 
     elif request.method == 'GET':
@@ -168,7 +168,7 @@ def edit_post(post_id):
     post = Post.query.get_or_404(post_id)
 
     if post.author != current_user:
-        flash('You are not authorized to edit this post.', 'danger')
+        flash('Вы не авторизованы, чтобы редактировать этот пост!', 'danger')
         return redirect(url_for('index'))
 
     form = EditPostForm(
@@ -182,7 +182,7 @@ def edit_post(post_id):
         post.preview = form.preview.data
         post.body = form.body.data
         db.session.commit()
-        flash('Your post has been updated.', 'success')
+        flash('Пост был обновлён.', 'success')
         return redirect(url_for('post_detail', post_id=post.id))
 
     if request.method == 'GET':
@@ -190,7 +190,7 @@ def edit_post(post_id):
         form.preview.data = post.preview
         form.body.data = post.body
 
-    return render_template('edit_post.html', title='Edit Post', form=form, post=post)
+    return render_template('edit_post.html', title='Изменить пост', form=form, post=post)
 
 
 @app.route("/delete_post/<int:post_id>", methods=['POST'])
@@ -200,16 +200,16 @@ def delete_post(post_id):
 
     # Проверяем, является ли текущий пользователь владельцем поста или администратором
     if post.author != current_user and not current_user.is_admin:
-        flash('You are not authorized to delete this post.', 'danger')
+        flash('Вы не авторизованы чтобы удалить этот пост.', 'danger')
         return redirect(url_for('index'))
 
     try:
         db.session.delete(post)
         db.session.commit()
-        flash('Post has been deleted.', 'success')
+        flash('Пост удалён.', 'success')
     except Exception as e:
         db.session.rollback()
-        flash(f'Error deleting post: {str(e)}', 'danger')
+        flash(f'Ошибка при удалении поста: {str(e)}', 'danger')
 
     # Возвращаемся на страницу пользователя, который создал пост
     return redirect(url_for('user', username=post.author.username))
@@ -223,12 +223,10 @@ def like(post_id):
         # Если пользователь уже лайкнул пост, убираем лайк
         like = db.session.scalar(sa.select(Like).where(Like.post_id == post_id, Like.user_id == current_user.id))
         db.session.delete(like)
-        flash('Removed your like.', 'success')
     else:
         # Если пользователь не лайкал пост, добавляем лайк
         like = Like(post_id=post_id, user_id=current_user.id)
         db.session.add(like)
-        flash('You liked the post.', 'success')
 
     db.session.commit()
     return redirect(url_for('post_detail', post_id=post_id))
@@ -242,11 +240,9 @@ def featured_posts(post_id):
         featured = db.session.scalar(
             sa.select(FeaturedPosts).where(FeaturedPosts.post_id == post_id, FeaturedPosts.user_id == current_user.id))
         db.session.delete(featured)
-        flash('Removed from your featured posts', 'success')
     else:
         featured = FeaturedPosts(post_id=post_id, user_id=current_user.id)
         db.session.add(featured)
-        flash("This post is now a featured post.", 'success')
 
     db.session.commit()
     return redirect(url_for('post_detail', post_id=post_id))

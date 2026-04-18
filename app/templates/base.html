@@ -40,7 +40,7 @@
             <!-- Navigation Links -->
             <ul class="navbar-nav mr-auto">
                 <li class="nav-item">
-                    <a class="nav-link" href="{{ url_for('index') }}">Home</a>
+                    <a class="nav-link" href="{{ url_for('index') }}">Главная</a>
                 </li>
             </ul>
 
@@ -53,20 +53,20 @@
                 <a
                         class="btn btn-outline-success my-2 my-sm-0" style="border-width: 2px; border-radius: 10px;"
                         href="{{ url_for('login') }}"
-                >Login</a>
+                >Войти</a>
                 <a
                         class="btn btn-warning my-2 my-sm-0 ml-2" style="border-width: 2px; border-radius: 10px;"
                         href="{{ url_for('register') }}"
-                >Sign Up</a>
+                >Зарегистрироваться</a>
                 {% else %}
                 <a class="btn btn-outline-success my-2 my-sm-0 mr-2" style="border-width: 2px; border-radius: 10px;"
-                   href="{{ url_for('user', username=current_user.username) }}">Profile</a>
+                   href="{{ url_for('user', username=current_user.username) }}">Профиль</a>
                 <a
                         class="btn btn-outline-warning my-2 my-sm-0" style="border-width: 2px; border-radius: 10px;"
                         href="{{ url_for('logout') }}"
                         onmouseover="this.classList.add('btn-danger'); this.classList.remove('btn-outline-warning');"
                         onmouseout="this.classList.add('btn-outline-warning'); this.classList.remove('btn-danger');"
-                >Logout</a>
+                >Выйти</a>
                 {% endif %}
             </div>
         </div>

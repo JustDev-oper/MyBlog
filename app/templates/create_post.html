@@ -5,7 +5,7 @@
 {% block content %}
 <div class="row justify-content-center mt-5">
     <div class="col-md-6">
-        <h2 class="text-center">Create a New Post</h2>
+        <h2 class="text-center">Создание поста</h2>
         <form method="POST" action="{{ url_for('create_post') }}">
             {{ form.hidden_tag() }}
 
@@ -35,26 +35,26 @@
 
         <!-- Back to Posts Link -->
         <div class="text-center mt-3">
-            <p><a href="{{ url_for('index') }}">Back to Posts</a></p>
+            <p><a href="{{ url_for('index') }}">Назад</a></p>
         </div>
     </div>
 </div>
 
 <!-- TinyMCE Integration -->
-<script src="https://cdn.tiny.cloud/1/247pvwinddayvgmaihbhjl5koq6ij8mbjbsesn6fqib18yoc/tinymce/6/tinymce.min.js"
-        referrerpolicy="origin"></script>
-<script>
-    tinymce.init({
-        selector: '#post_body',
-        plugins: 'advlist autolink lists link image charmap preview anchor textcolor',
-        toolbar: 'undo redo | bullist numlist | hr',
-        menubar: 'insert format',
-        mobile: {
-            theme: 'silver',
-            plugins: 'advlist autolink lists link image charmap preview anchor textcolor',
-            toolbar: 'undo redo | bullist numlist | hr',
-            menubar: 'insert format'
-        }
-    });
-</script>
+{#<script src="https://cdn.tiny.cloud/1/247pvwinddayvgmaihbhjl5koq6ij8mbjbsesn6fqib18yoc/tinymce/6/tinymce.min.js"#}
+{#        referrerpolicy="origin"></script>#}
+{#<script>#}
+{#    tinymce.init({#}
+{#        selector: '#post_body',#}
+{#        plugins: 'advlist autolink lists link image charmap preview anchor textcolor',#}
+{#        toolbar: 'undo redo | bullist numlist | hr',#}
+{#        menubar: 'insert format',#}
+{#        mobile: {#}
+{#            theme: 'silver',#}
+{#            plugins: 'advlist autolink lists link image charmap preview anchor textcolor',#}
+{#            toolbar: 'undo redo | bullist numlist | hr',#}
+{#            menubar: 'insert format'#}
+{#        }#}
+{#    });#}
+{#</script>#}
 {% endblock %}

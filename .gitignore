@@ -6,3 +6,4 @@ app.db
 /app/static/uploads
  __pycache__
  app/__pycache__
+/test.py
