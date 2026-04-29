@@ -107,3 +107,6 @@ class Config(object):
     SQLALCHEMY_DATABASE_URI = 'sqlite:///your_database.db'
     SQLALCHEMY_TRACK_MODIFICATIONS = False
     # Дополнительные параметры конфигурации
+   ```
+
+Для Яндекс лицея: https://disk.yandex.ru/d/cccdVK1dgVkxLA
