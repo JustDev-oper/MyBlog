@@ -23,7 +23,7 @@
                     </p>
                 </div>
                 <div class="card-body">
-                    <p class="card-text">{{ post.body | safe }}</p>
+                    <p class="card-text">{{ post.get_safe_body() | safe }}</p>
                 </div>
 
                 <div class="card-footer bg-light text-center">

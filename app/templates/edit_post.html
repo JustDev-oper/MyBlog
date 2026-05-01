@@ -1,0 +1,41 @@
+{% extends "base.html" %}
+
+{% block title %}Edit Post{% endblock %}
+
+{% block content %}
+<table width="100%" border="0" cellpadding="10" cellspacing="0">
+    <tr>
+        <td style="text-align: center;">
+            <table border="1" cellpadding="10" cellspacing="0" style="background-color: #FFFFCC; margin: 0 auto; width: 600px;">
+                <tr>
+                    <td style="text-align: center;">
+                        <h3 style="color: #FF0000;">Редактирование поста</h3>
+                        <form method="POST" action="{{ url_for('edit_post', post_id=post.id) }}">
+                            {{ form.hidden_tag() }}
+                            <table width="100%" border="0" cellpadding="5" cellspacing="0">
+                                <tr>
+                                    <td><label for="title">Заголовок</label></td>
+                                    <td><input type="text" name="title" value="{{ form.title.data or '' }}" size="50"></td>
+                                </tr>
+                                <tr>
+                                    <td><label for="preview">Превью</label></td>
+                                    <td><textarea name="preview" rows="3" cols="50">{{ form.preview.data or '' }}</textarea></td>
+                                </tr>
+                                <tr>
+                                    <td><label for="body">Основное содержание</label></td>
+                                    <td><textarea name="body" id="body" rows="10" cols="50">{{ form.body.data or '' }}</textarea></td>
+                                </tr>
+                                <tr>
+                                    <td colspan="2" style="text-align: center;">
+                                        <input type="submit" value="Сохранить изменения" style="background-color: #0000FF; color: #FFFFFF; padding: 5px 10px; font-size: 16px;">
+                                    </td>
+                                </tr>
+                            </table>
+                        </form>
+                    </td>
+                </tr>
+            </table>
+        </td>
+    </tr>
+</table>
+{% endblock %}

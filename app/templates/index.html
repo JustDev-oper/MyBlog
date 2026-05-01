@@ -1,0 +1,124 @@
+{% extends "base.html" %}
+
+{% block title %}Главная{% endblock %}
+
+{% block content %}
+<table width="100%" border="1" cellpadding="10" cellspacing="0">
+    <tr>
+        <td width="70%" valign="top">
+            {% if posts.items %}
+            <h2 style="background-color: #FF0000; color: #FFFFFF; text-align: center; padding: 10px;">Все посты</h2>
+            {% for post in posts.items %}
+            <table width="100%" border="1" cellpadding="5" cellspacing="0" style="margin-bottom: 20px; background-color: #FFFFCC;">
+                <tr>
+                    <td colspan="2">
+                        <a href="{{ url_for('post_detail', post_id=post.id) }}" style="text-decoration: none;">
+                            {% if post.image %}
+                            <img src="{{ post.image }}" alt="{{ post.title }}" width="100%" height="200" style="object-fit: cover;">
+                            {% endif %}
+                            <h3 style="color: #0000FF; text-align: center;">{{ post.title }}</h3>
+                        </a>
+                    </td>
+                </tr>
+                <tr>
+                    <td colspan="2">
+                        <p>{{ post.preview }}</p>
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        <img src="{{ url_for('static', filename='uploads/' + post.author.avatar if post.author.avatar else 'default-avatar.png') }}" alt="{{ post.author.username }}'s Avatar" width="30" height="30">
+                        <a href="{{ url_for('user', username=post.author.username) }}" style="color: #00FF00;">{{ post.author.username }}</a>
+                    </td>
+                    <td style="text-align: right;">
+                        {{ post.formatted_timestamp() }}
+                    </td>
+                </tr>
+            </table>
+            {% endfor %}
+
+            <!-- Pagination -->
+            <table width="100%" border="0" cellpadding="5" cellspacing="0">
+                <tr>
+                    <td style="text-align: center;">
+                        {% if posts.has_prev %}
+                        <a href="{{ url_for('index', page=posts.prev_num) }}" style="background-color: #00FF00; color: #000000; padding: 5px 10px;">&laquo; Previous</a>
+                        {% endif %}
+                        {% for page_num in range(1, posts.pages + 1) %}
+                        <a href="{{ url_for('index', page=page_num) }}" style="background-color: {% if page_num == posts.page %}#FF0000{% else %}#FFFF00{% endif %}; color: #000000; padding: 5px 10px; margin: 0 2px;">{{ page_num }}</a>
+                        {% endfor %}
+                        {% if posts.has_next %}
+                        <a href="{{ url_for('index', page=posts.next_num) }}" style="background-color: #00FF00; color: #000000; padding: 5px 10px;">Next &raquo;</a>
+                        {% endif %}
+                    </td>
+                </tr>
+            </table>
+
+            {% else %}
+            <h4 style="text-align: center; color: #FF0000;">😔 Извините, здесь пока ничего нет.</h4>
+            <p style="text-align: center;">Почему бы не создать свой первый пост?</p>
+            {% endif %}
+        </td>
+        <td width="30%" valign="top">
+            <!-- Popular Posts -->
+            <table width="100%" border="1" cellpadding="5" cellspacing="0" style="background-color: #CCFFCC;">
+                <tr>
+                    <td style="background-color: #00FF00; color: #000000; text-align: center; font-weight: bold;">
+                        Популярные посты
+                    </td>
+                </tr>
+                {% if popular_posts %}
+                {% for post in popular_posts %}
+                <tr>
+                    <td>
+                        <a href="{{ url_for('post_detail', post_id=post.id) }}" style="text-decoration: none;">
+                            <strong>{{ post.title|truncate(24) }}</strong><br>
+                            by <a href="{{ url_for('user', username=post.author.username) }}" style="color: #FF0000;">{{ post.author.username }}</a><br>
+                            {{ post.formatted_timestamp() }} | {{ post.like_count() }} likes
+                        </a>
+                    </td>
+                </tr>
+                {% endfor %}
+                {% else %}
+                <tr>
+                    <td style="text-align: center;">No popular posts available.</td>
+                </tr>
+                {% endif %}
+            </table>
+
+            <!-- Featured Posts -->
+            <table width="100%" border="1" cellpadding="5" cellspacing="0" style="background-color: #CCCCFF; margin-top: 20px;">
+                <tr>
+                    <td style="background-color: #0000FF; color: #FFFFFF; text-align: center; font-weight: bold;">
+                        Избранные посты
+                    </td>
+                </tr>
+                {% if featured_posts %}
+                {% for post in featured_posts %}
+                <tr>
+                    <td>
+                        <a href="{{ url_for('post_detail', post_id=post.id) }}" style="text-decoration: none;">
+                            <strong>{{ post.title|truncate(24) }}</strong><br>
+                            by <a href="{{ url_for('user', username=post.author.username) }}" style="color: #FF0000;">{{ post.author.username }}</a><br>
+                            {{ post.formatted_timestamp() }}
+                        </a>
+                    </td>
+                </tr>
+                {% endfor %}
+                {% else %}
+                <tr>
+                    <td style="text-align: center;">No featured posts available.</td>
+                </tr>
+                {% endif %}
+            </table>
+        </td>
+    </tr>
+</table>
+
+<!-- Fixed "Create Post" Button -->
+<div style="position: fixed; bottom: 20px; right: 20px;">
+    <a href="{{ url_for('create_post') }}" style="background-color: #00FF00; color: #000000; padding: 10px 20px; font-size: 18px; font-weight: bold; text-decoration: none; border: 2px solid #000000;">
+        Создать пост
+    </a>
+</div>
+{% endblock %}

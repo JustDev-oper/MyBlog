@@ -1,0 +1,48 @@
+{% extends "base.html" %}
+
+{% block title %}Edit Profile{% endblock %}
+
+{% block content %}
+<table width="100%" border="0" cellpadding="10" cellspacing="0">
+    <tr>
+        <td style="text-align: center;">
+            <table border="1" cellpadding="10" cellspacing="0" style="background-color: #FFFFCC; margin: 0 auto; width: 600px;">
+                <tr>
+                    <td style="text-align: center;">
+                        <h3 style="color: #FF0000;">Изменить профиль</h3>
+                        <!-- Display Current Avatar -->
+                        {% if current_user.avatar %}
+                        <img src="{{ url_for('static', filename='uploads/' + current_user.avatar) }}" alt="Current Avatar" width="150" height="150" style="border-radius: 50%;">
+                        {% else %}
+                        <p>No avatar set.</p>
+                        {% endif %}
+                        <br><br>
+                        <form method="POST" action="{{ url_for('edit_profile') }}" enctype="multipart/form-data">
+                            {{ form.hidden_tag() }}
+                            <table width="100%" border="0" cellpadding="5" cellspacing="0">
+                                <tr>
+                                    <td><label for="username">Имя пользователя</label></td>
+                                    <td><input type="text" name="username" value="{{ form.username.data or '' }}" size="50"></td>
+                                </tr>
+                                <tr>
+                                    <td><label for="about_me">Обо мне</label></td>
+                                    <td><textarea name="about_me" rows="10" cols="50">{{ form.about_me.data or '' }}</textarea></td>
+                                </tr>
+                                <tr>
+                                    <td><label for="avatar">Загрузить новую аватарку (необязательно)</label></td>
+                                    <td><input type="file" name="avatar" accept="image/*"></td>
+                                </tr>
+                                <tr>
+                                    <td colspan="2" style="text-align: center;">
+                                        <input type="submit" value="Сохранить изменения" style="background-color: #0000FF; color: #FFFFFF; padding: 5px 10px; font-size: 16px;">
+                                    </td>
+                                </tr>
+                            </table>
+                        </form>
+                    </td>
+                </tr>
+            </table>
+        </td>
+    </tr>
+</table>
+{% endblock %}

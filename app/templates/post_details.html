@@ -1,0 +1,50 @@
+{% extends "base.html" %}
+
+{% block title %}{{ post.title }}{% endblock %}
+
+{% block content %}
+<table width="100%" border="0" cellpadding="10" cellspacing="0">
+    <tr>
+        <td style="text-align: center;">
+            <table border="1" cellpadding="10" cellspacing="0" style="background-color: #FFFFCC; margin: 0 auto; width: 80%;">
+                {% if post.image %}
+                <tr>
+                    <td colspan="2">
+                        <img src="{{ post.image }}" alt="{{ post.title }}" width="100%">
+                    </td>
+                </tr>
+                {% endif %}
+                <tr>
+                    <td colspan="2" style="text-align: center;">
+                        <h1 style="color: #0000FF;">{{ post.title }}</h1>
+                        <p style="color: #666666;">
+                            Создан в {{ post.formatted_timestamp() }} пользователем
+                            <a href="{{ url_for('user', username=post.author.username) }}" style="color: #FF0000;">{{ post.author.username }}</a>
+                        </p>
+                    </td>
+                </tr>
+                <tr>
+                    <td colspan="2">
+                        <p>{{ post.get_safe_body() | safe }}</p>
+                    </td>
+                </tr>
+                <tr>
+                    <td colspan="2" style="text-align: center;">
+                        <a href="/app/static" style="background-color: #CCCCCC; color: #000000; padding: 5px 10px; text-decoration: none;">Назад</a>
+                        <form action="{{ url_for('featured_posts', post_id=post.id) }}" method="POST" style="display: inline;">
+                            <button type="submit" style="background-color: {% if current_user.is_featured(post) %}#CCCCCC{% else %}#FFFFFF{% endif %}; border: 1px solid #000000; padding: 5px;">
+                                Bookmark
+                            </button>
+                        </form>
+                        <form action="{{ url_for('like', post_id=post.id) }}" method="POST" style="display: inline;">
+                            <button type="submit" style="background-color: {% if current_user.is_liking(post) %}#FF0000{% else %}#FFFFFF{% endif %}; border: 1px solid #000000; padding: 5px;">
+                                <blink>♥</blink> {{ post.like_count() }}
+                            </button>
+                        </form>
+                    </td>
+                </tr>
+            </table>
+        </td>
+    </tr>
+</table>
+{% endblock %}

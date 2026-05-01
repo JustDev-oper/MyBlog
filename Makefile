@@ -2,15 +2,15 @@ include .env
 export
 
 
-env-up:
+up:
 	@docker compose up -d db
-	docker compose up app
+	docker compose up --build app
 
-env-down:
+down:
 	@docker compose down db
 	docker compose down app
 
-env-cleanup:
+cleanup:
 	@read -p "Вы уверены, что хотите удалить все данные? (y/n): " ans; \
 	if [ "$$ans" = "y" ]; then \
 	  		docker compose down db && \
@@ -20,8 +20,8 @@ env-cleanup:
 	  		echo "Операция отменена."; \
 	fi
 
-env-port-forward:
+port-forward:
 	@docker compose up -d port-forwarder
 
-env-port-close:
+port-close:
 	@docker compose down port-forwarder

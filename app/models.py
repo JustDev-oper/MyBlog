@@ -8,6 +8,7 @@ from flask_login import UserMixin
 from werkzeug.security import generate_password_hash, check_password_hash
 
 from app import db, login, moscow_tz  # Убедитесь, что moscow_tz определен и импортирован
+from app.utils import sanitize_html
 
 
 class User(UserMixin, db.Model):
@@ -19,7 +20,7 @@ class User(UserMixin, db.Model):
 
     posts: so.Mapped[list['Post']] = so.relationship('Post', back_populates='author', lazy=True)
 
-    about_me: so.Mapped[Optional[str]] = so.mapped_column(sa.String(140))
+    about_me: so.Mapped[Optional[str]] = so.mapped_column(sa.String(100000))
     last_seen: so.Mapped[Optional[datetime]] = so.mapped_column(default=lambda: datetime.now(moscow_tz))
     avatar: so.Mapped[str] = so.mapped_column(sa.String(120), default='default_avatar.png')
 
@@ -65,6 +66,10 @@ class User(UserMixin, db.Model):
     def is_featured(self, post: 'Post') -> bool:
         return db.session.query(FeaturedPosts).filter_by(post_id=post.id, user_id=self.id).count() > 0
 
+    # def get_safe_about_me(self) -> str:
+    #     """Возвращает санитизированное описание профиля без XSS-уязвимостей"""
+    #     return sanitize_html(self.about_me) if self.about_me else ''
+
     @property
     def is_online(self) -> bool:
         now = datetime.now(moscow_tz)
@@ -100,6 +105,10 @@ class Post(db.Model):
 
     def formatted_timestamp(self) -> str:
         return self.timestamp.strftime('%d.%m.%Y %H:%M')
+
+    # def get_safe_body(self) -> str:
+    #     """Возвращает санитизированное содержание поста без XSS-уязвимостей"""
+    #     return sanitize_html(self.body)
 
 
 class Like(db.Model):

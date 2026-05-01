@@ -1,0 +1,160 @@
+{% extends "base.html" %}
+
+{% block title %}{{ user.username }}{% endblock %}
+
+{% block content %}
+<table width="100%" border="1" cellpadding="10" cellspacing="0">
+    <tr>
+        <td width="30%" valign="top">
+            <!-- User Profile -->
+            <table width="100%" border="1" cellpadding="5" cellspacing="0" style="background-color: #FFFFCC;">
+                <tr>
+                    <td style="text-align: center; background-color: #CCCCCC;">
+                        <strong>Пользователь</strong>
+                    </td>
+                </tr>
+                <tr>
+                    <td style="text-align: center;">
+                        <img src="{{ url_for('static', filename='uploads/' + user.avatar) }}" alt="User Avatar" width="150" height="150" style="border-radius: 50%;">
+                        <h3>{{ user.username }}</h3>
+                        {% if user.is_admin %}
+                        <span style="background-color: #FF0000; color: #FFFFFF; padding: 2px 5px;">Админ</span>
+                        {% endif %}
+                        {% if user.last_seen %}
+                        {% if user.is_online %}
+                        <span style="background-color: #00FF00; color: #000000; padding: 2px 5px;">Онлайн</span>
+                        {% else %}
+                        <span style="background-color: #CCCCCC; color: #000000; padding: 2px 5px;">Оффлайн</span>
+                        <br>Последний онлайн: {{ user.formatted_last_seen() }}
+                        {% endif %}
+                        {% endif %}
+                    </td>
+                </tr>
+                {% if user == current_user %}
+                <tr>
+                    <td style="text-align: center;">
+                        <a href="{{ url_for('edit_profile') }}" style="background-color: #0000FF; color: #FFFFFF; padding: 5px 10px; text-decoration: none;">Изменить профиль</a>
+                        <br><br>
+                        <a href="{{ url_for('create_post') }}" style="background-color: #00FF00; color: #000000; padding: 5px 10px; text-decoration: none;">Создать пост</a>
+                    </td>
+                </tr>
+                {% endif %}
+            </table>
+
+            <!-- Statistics -->
+            <table width="100%" border="1" cellpadding="5" cellspacing="0" style="background-color: #CCFFCC; margin-top: 20px;">
+                <tr>
+                    <td style="text-align: center; background-color: #CCCCCC;">
+                        <strong>Статистика</strong>
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        <p><b>Постов:</b> {{ user.posts_count() }}</p>
+                        <p><b>Всего лайков:</b> {{ user.total_likes() }}</p>
+                        <p><b>Присоединился:</b> {{ user.formatted_reg_date() }}</p>
+                    </td>
+                </tr>
+            </table>
+        </td>
+        <td width="70%" valign="top">
+            <!-- About Me -->
+            <table width="100%" border="1" cellpadding="5" cellspacing="0" style="background-color: #CCCCFF;">
+                <tr>
+                    <td style="text-align: center; background-color: #CCCCCC;">
+                        <strong>Обо мне</strong>
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        {% if user.about_me %}
+{#                        <p>{{ user.get_safe_about_me() | safe }}</p>#}
+                        <p>{{ user.about_me | safe }}</p>
+                        {% else %}
+                        {% if user == current_user %}
+                        <p style="text-align: center;">Вы еще ничего не написали о себе! 😒</p>
+                        {% else %}
+                        <p style="text-align: center;"><b>{{ user.username }}</b> еще ничего не написал о себе! 😒</p>
+                        {% endif %}
+                        {% endif %}
+                    </td>
+                </tr>
+            </table>
+
+            <!-- User Posts -->
+            <table width="100%" border="1" cellpadding="10" cellspacing="0" style="background-color: #FFFFCC; margin-top: 20px;">
+                <tr>
+                    <td style="text-align: center; background-color: #FF0000; color: #FFFFFF;">
+                        <strong>Посты {{ user.username }}</strong>
+                    </td>
+                </tr>
+                {% if posts.total == 0 %}
+                <tr>
+                    <td style="text-align: center;">
+                        <h4>😔 К сожалению, здесь пока ничего нет.</h4>
+                    </td>
+                </tr>
+                {% else %}
+                {% for post in posts.items %}
+                <tr>
+                    <td>
+                        <table width="100%" border="1" cellpadding="5" cellspacing="0" style="background-color: #FFFFFF;">
+                            <tr>
+                                <td colspan="2" style="text-align: center; background-color: #FFFF00;">
+                                    <strong>{{ post.title }}</strong>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>{{ post.formatted_timestamp() }}</td>
+                                <td style="text-align: right;">
+                                    {% if user == current_user %}
+                                    <a href="{{ url_for('edit_post', post_id=post.id) }}" style="color: #00FF00;">Edit</a>
+                                    {% endif %}
+                                </td>
+                            </tr>
+                            <tr>
+                                <td colspan="2">
+                                    <p style="max-height: 100px; overflow: auto;">{{ post.preview }}</p>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>
+                                    <a href="{{ url_for('post_detail', post_id=post.id) }}" style="background-color: #0000FF; color: #FFFFFF; padding: 5px 10px; text-decoration: none;">Читать</a>
+                                </td>
+                                <td style="text-align: right;">
+                                    {% if current_user.is_admin or user == current_user %}
+                                    <form action="{{ url_for('delete_post', post_id=post.id) }}" method="POST" style="display: inline;">
+                                        <button type="submit" onclick="return confirm('Вы уверены, что хотите удалить этот пост?');" style="background-color: #FF0000; color: #FFFFFF; padding: 5px 10px; border: none;">Удалить</button>
+                                    </form>
+                                    {% endif %}
+                                </td>
+                            </tr>
+                        </table>
+                    </td>
+                </tr>
+                {% endfor %}
+
+                <!-- Pagination -->
+                <tr>
+                    <td style="text-align: center;">
+                        {% if posts.has_prev %}
+                        <a href="{{ url_for('user', username=user.username, page=posts.prev_num) }}" style="background-color: #00FF00; color: #000000; padding: 5px 10px; margin: 0 5px;">&laquo;</a>
+                        {% endif %}
+                        {% for p in posts.iter_pages(left_edge=1, right_edge=1, left_current=1, right_current=1) %}
+                        {% if p %}
+                        <a href="{{ url_for('user', username=user.username, page=p) }}" style="{% if p == posts.page %}background-color: #FF0000; color: #FFFFFF;{% else %}background-color: #FFFF00; color: #000000;{% endif %} padding: 5px 10px; margin: 0 2px; text-decoration: none;">{{ p }}</a>
+                        {% else %}
+                        ...
+                        {% endif %}
+                        {% endfor %}
+                        {% if posts.has_next %}
+                        <a href="{{ url_for('user', username=user.username, page=posts.next_num) }}" style="background-color: #00FF00; color: #000000; padding: 5px 10px; margin: 0 5px;">&raquo;</a>
+                        {% endif %}
+                    </td>
+                </tr>
+                {% endif %}
+            </table>
+        </td>
+    </tr>
+</table>
+{% endblock %}
