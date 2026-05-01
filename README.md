@@ -20,6 +20,7 @@
 
 - Python 3.8+
 - pip
+- PostgreSQL 12+
 
 ### Шаги по установке
 
@@ -61,21 +62,37 @@
     pip install -r requirements.txt
     ```
 
-6. **Настройте базу данных:**
+6. **Настройте переменные окружения:**
+
+    Создайте файл `.env` на основе `.env.example`:
 
     ```bash
-   flask db init
-   flask db migrate -m "Initial"
-   flask db upgrade
+    cp .env.example .env
     ```
 
-7. **Запустите приложение:**
+    Отредактируйте `.env` и установите ваши параметры подключения к PostgreSQL:
+
+    ```env
+    POSTGRES_USER=myblog_user
+    POSTGRES_PASSWORD=your_password
+    POSTGRES_DB=myblog
+    DATABASE_URL=postgresql://myblog_user:your_password@localhost:5432/myblog
+    SECRET_KEY=your-secret-key
+    ```
+
+7. **Создайте базу данных PostgreSQL:**
 
     ```bash
-    flask run
+    createdb -U myblog_user myblog
     ```
 
-   По умолчанию приложение будет доступно по адресу `http://127.0.0.1:5000`.
+8. **Запустите приложение:**
+
+    ```bash
+    python blog.py
+    ```
+
+    По умолчанию приложение будет доступно по адресу `http://127.0.0.1:5000`.
 
 ## Использование
 
@@ -98,15 +115,40 @@
 
 ## Конфигурация
 
-Конфигурационные параметры хранятся в файле `config.py`. Убедитесь, что вы
-настроили все параметры перед запуском приложения:
+Конфигурационные параметры хранятся в файле `config.py`. Для работы приложения необходимо настроить PostgreSQL.
 
-```python
-class Config(object):
-    SECRET_KEY = 'your_secret_key'
-    SQLALCHEMY_DATABASE_URI = 'sqlite:///your_database.db'
-    SQLALCHEMY_TRACK_MODIFICATIONS = False
-    # Дополнительные параметры конфигурации
-   ```
+**Переменные окружения:**
 
-Для Яндекс лицея: https://disk.yandex.ru/d/cccdVK1dgVkxLA
+- `DATABASE_URL` — URL подключения к PostgreSQL (если не установлена, используется значение по умолчанию)
+- `SECRET_KEY` — секретный ключ для Flask (если не установлен, используется значение по умолчанию для разработки)
+- `FLASK_DEBUG` — режим отладки (True/False)
+
+**Пример конфигурации для разработки:**
+
+```env
+DATABASE_URL=postgresql://myblog_user:password@localhost:5432/myblog
+SECRET_KEY=dev-secret-key
+FLASK_DEBUG=True
+```
+
+**Пример конфигурации в production:**
+
+```env
+DATABASE_URL=postgresql://user:secure_password@prod-server:5432/myblog_db
+SECRET_KEY=secure-random-key-here
+FLASK_DEBUG=False
+```
+
+## Docker
+
+Для запуска приложения в Docker:
+
+```bash
+# Скопируйте .env.example в .env и отредактируйте параметры
+cp .env.example .env
+
+# Запустите контейнеры
+docker-compose up -d
+
+# Приложение будет доступно на http://localhost:5000
+```

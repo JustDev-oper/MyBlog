@@ -5,7 +5,6 @@ import sqlalchemy as sa
 import sqlalchemy.orm as so
 from flask import url_for
 from flask_login import UserMixin
-from sqlalchemy_serializer import SerializerMixin
 from werkzeug.security import generate_password_hash, check_password_hash
 
 from app import db, login, moscow_tz  # Убедитесь, что moscow_tz определен и импортирован
@@ -15,7 +14,7 @@ class User(UserMixin, db.Model):
     id: so.Mapped[int] = so.mapped_column(primary_key=True)
     username: so.Mapped[str] = so.mapped_column(sa.String(64), index=True, unique=True)
     email: so.Mapped[str] = so.mapped_column(sa.String(120), index=True, unique=True)
-    password_hash: so.Mapped[Optional[str]] = so.mapped_column(sa.String(256))
+    password_hash: so.Mapped[str] = so.mapped_column(sa.String(256))
     is_admin: so.Mapped[bool] = so.mapped_column(default=False)
 
     posts: so.Mapped[list['Post']] = so.relationship('Post', back_populates='author', lazy=True)
@@ -53,6 +52,7 @@ class User(UserMixin, db.Model):
     def formatted_reg_date(self) -> Optional[str]:
         if self.register_date:
             return self.register_date.strftime("%d.%m.%Y")
+        return None
 
     def formatted_last_seen(self) -> Optional[str]:
         if self.last_seen:
@@ -75,7 +75,7 @@ class User(UserMixin, db.Model):
         return False
 
 
-class Post(db.Model, SerializerMixin):
+class Post(db.Model):
     id: so.Mapped[int] = so.mapped_column(primary_key=True)
     title: so.Mapped[str] = so.mapped_column(sa.String(60))
     preview: so.Mapped[str] = so.mapped_column(sa.String(120))
@@ -126,5 +126,5 @@ class FeaturedPosts(db.Model):
 
 
 @login.user_loader
-def load_user(id: int) -> Optional[User]:
-    return db.session.get(User, id)
+def load_user(user_id: int) -> Optional[User]:
+    return db.session.get(User, user_id)

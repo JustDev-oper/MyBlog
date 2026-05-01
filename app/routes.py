@@ -7,7 +7,6 @@ from flask import current_app
 from flask import render_template, url_for, redirect, flash, request
 from flask_login import current_user, login_user, logout_user, login_required
 from sqlalchemy import func
-from user_agents import parse
 from werkzeug.utils import secure_filename
 
 from app import app, db, moscow_tz
@@ -30,11 +29,8 @@ def index():
                      .order_by(func.count(Like.id).desc())
                      .limit(20)
                      .all())
-    user_agent = parse(request.headers.get('User-Agent'))
-    if user_agent.is_mobile:
-        template = 'mobile_index.html'
-    else:
-        template = 'desktop_index.html'
+
+    template = 'old/index.html'
     page = request.args.get("page", 1, type=int)
     per_page = 4
     posts = Post.query.order_by(Post.timestamp.desc()).paginate(page=page, per_page=per_page, error_out=False)
@@ -56,7 +52,7 @@ def login():
         if not next_page or urlsplit(next_page).netloc != '':
             next_page = url_for('index')
         return redirect(next_page)
-    return render_template('login.html', title='Вход', form=form)
+    return render_template('old/login.html', title='Вход', form=form)
 
 
 @app.route('/logout')
@@ -71,7 +67,7 @@ def user(username):
     page = request.args.get('page', 1, type=int)
     posts = Post.query.filter_by(author=user).order_by(Post.timestamp.desc()).paginate(page=page, per_page=4,
                                                                                        error_out=False)
-    return render_template('user.html', user=user, posts=posts)
+    return render_template('old/user.html', user=user, posts=posts)
 
 
 @app.before_request
@@ -93,7 +89,7 @@ def register():
         db.session.commit()
         flash('Поздравляем! Теперь вы зарегистрированный пользователь.', "success")
         return redirect(url_for('login'))
-    return render_template('register.html', title='Регистрация', form=form)
+    return render_template('old/register.html', title='Регистрация', form=form)
 
 
 @app.route('/edit_profile', methods=['GET', 'POST'])
@@ -135,7 +131,7 @@ def edit_profile():
         form.username.data = current_user.username
         form.about_me.data = current_user.about_me
 
-    return render_template('edit_profile.html', title='Edit Profile', form=form, user=current_user)
+    return render_template('old/edit_profile.html', title='Изменить профиль', form=form, user=current_user)
 
 
 @app.route("/create_post", methods=['GET', 'POST'])
@@ -152,14 +148,14 @@ def create_post():
         else:
             flash('Ошибка: пользователь не аутентифицирован', 'danger')
             return redirect(url_for('login'))
-    return render_template("create_post.html", form=form)
+    return render_template("old/create_post.html", form=form)
 
 
 @app.route("/post_detail/<post_id>")
 @login_required
 def post_detail(post_id):
     post = Post.query.filter_by(id=post_id).first_or_404()
-    return render_template("post_details.html", post=post)
+    return render_template("old/post_details.html", post=post)
 
 
 @app.route('/edit_post/<int:post_id>', methods=['GET', 'POST'])
@@ -190,7 +186,7 @@ def edit_post(post_id):
         form.preview.data = post.preview
         form.body.data = post.body
 
-    return render_template('edit_post.html', title='Изменить пост', form=form, post=post)
+    return render_template('old/edit_post.html', title='Изменить пост', form=form, post=post)
 
 
 @app.route("/delete_post/<int:post_id>", methods=['POST'])
@@ -247,6 +243,8 @@ def featured_posts(post_id):
     db.session.commit()
     return redirect(url_for('post_detail', post_id=post_id))
 
+
 @app.route('/api_info', methods=['GET'])
 def api_info():
-    return render_template("api_info.html")
+    return render_template("old/api_info.html")
+

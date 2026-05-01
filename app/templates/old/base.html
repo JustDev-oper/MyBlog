@@ -4,27 +4,13 @@
     <meta charset="UTF-8"/>
     <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
     <title>{% block title %}{% endblock %}</title>
-    <link
-            href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css"
-            rel="stylesheet"
-    />
-    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap"
-          rel="stylesheet">
-    <link
-            href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css"
-            rel="stylesheet"
-    />
-    <style>
-        body {
-            font-family: 'Poppins', sans-serif;
-        }
-    </style>
+
 </head>
 <body class="d-flex flex-column min-vh-100">
 <!-- Header -->
 <header class="bg-dark text-white fixed-top text-size">
     <nav class="navbar navbar-expand-lg navbar-dark" style="background: black; font-size: 20px;">
-        <a class="navbar-brand" href="/">My Blog</a>
+        <a class="navbar-brand" href="/app/static">My Blog</a>
         <button
                 class="navbar-toggler"
                 type="button"
@@ -53,23 +39,23 @@
             <!-- Action Buttons -->
             <div class="form-inline">
                 {% if current_user.is_anonymous %}
-                <a
-                        class="btn btn-outline-success my-2 my-sm-0" style="border-width: 2px; border-radius: 10px;"
-                        href="{{ url_for('login') }}"
-                >Войти</a>
-                <a
-                        class="btn btn-warning my-2 my-sm-0 ml-2" style="border-width: 2px; border-radius: 10px;"
-                        href="{{ url_for('register') }}"
-                >Зарегистрироваться</a>
+                    <a
+                            class="btn btn-outline-success my-2 my-sm-0" style="border-width: 2px; border-radius: 10px;"
+                            href="{{ url_for('login') }}"
+                    >Войти</a>
+                    <a
+                            class="btn btn-warning my-2 my-sm-0 ml-2" style="border-width: 2px; border-radius: 10px;"
+                            href="{{ url_for('register') }}"
+                    >Зарегистрироваться</a>
                 {% else %}
-                <a class="btn btn-outline-success my-2 my-sm-0 mr-2" style="border-width: 2px; border-radius: 10px;"
-                   href="{{ url_for('user', username=current_user.username) }}">Профиль</a>
-                <a
-                        class="btn btn-outline-warning my-2 my-sm-0" style="border-width: 2px; border-radius: 10px;"
-                        href="{{ url_for('logout') }}"
-                        onmouseover="this.classList.add('btn-danger'); this.classList.remove('btn-outline-warning');"
-                        onmouseout="this.classList.add('btn-outline-warning'); this.classList.remove('btn-danger');"
-                >Выйти</a>
+                    <a class="btn btn-outline-success my-2 my-sm-0 mr-2" style="border-width: 2px; border-radius: 10px;"
+                       href="{{ url_for('user', username=current_user.username) }}">Профиль</a>
+                    <a
+                            class="btn btn-outline-warning my-2 my-sm-0" style="border-width: 2px; border-radius: 10px;"
+                            href="{{ url_for('logout') }}"
+                            onmouseover="this.classList.add('btn-danger'); this.classList.remove('btn-outline-warning');"
+                            onmouseout="this.classList.add('btn-outline-warning'); this.classList.remove('btn-danger');"
+                    >Выйти</a>
                 {% endif %}
             </div>
         </div>
@@ -79,18 +65,19 @@
 <main role="main" class="flex-fill mt-5 pt-3">
     <div class="container">
         {% with messages = get_flashed_messages(with_categories=true) %}
-        {% if messages %}
-        <div class="alert-container mb-4">
-            {% for category, message in messages %}
-            <div class="alert alert-{{ category }} alert-dismissible fade show" role="alert" style="font-size: 18px">
-                {{ message }}
-                <button type="button" class="close" data-dismiss="alert" aria-label="Close">
-                    <span aria-hidden="true">&times;</span>
-                </button>
-            </div>
-            {% endfor %}
-        </div>
-        {% endif %}
+            {% if messages %}
+                <div class="alert-container mb-4">
+                    {% for category, message in messages %}
+                        <div class="alert alert-{{ category }} alert-dismissible fade show" role="alert"
+                             style="font-size: 18px">
+                            {{ message }}
+                            <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                                <span aria-hidden="true">&times;</span>
+                            </button>
+                        </div>
+                    {% endfor %}
+                </div>
+            {% endif %}
         {% endwith %}
         <!-- Здесь будет динамический контент -->
         {% block content %} {% endblock %}
